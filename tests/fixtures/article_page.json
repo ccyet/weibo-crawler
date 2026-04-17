@@ -1,0 +1,20 @@
+{
+  "data": {
+    "list": [
+      {
+        "id": 20001,
+        "mblogid": "ARTICLE001",
+        "created_at": "Fri Apr 17 12:10:00 +0800 2026",
+        "text_raw": "这是文章卡片",
+        "page_info": {
+          "page_url": "https://weibo.com/ttarticle/p/show?id=2309401234567890123456"
+        },
+        "user": {
+          "id": 123456,
+          "idstr": "123456"
+        }
+      }
+    ],
+    "since_id": null
+  }
+}

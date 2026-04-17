@@ -1,0 +1,11 @@
+{
+  "uid": "",
+  "cookie": "",
+  "out_dir": "output",
+  "sleep_sec": 1.0,
+  "timeout_sec": 20.0,
+  "max_post_pages": 10,
+  "max_article_pages": 10,
+  "save_raw": true,
+  "fail_on_unknown_article": false
+}

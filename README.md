@@ -1,15 +1,6 @@
 # weibo-crawler
 
-用于抓取指定微博 UID 的发帖与专栏文章，输出为 `CSV` 和 `JSONL`。
-
-## 功能
-
-- 抓取指定 UID 的微博发帖
-- 抓取专栏/长文内容
-- 支持翻页
-- 支持登录 Cookie
-- 自动展开长文
-- 输出结构化数据到本地目录
+用于抓取指定微博 UID 的 V+ 发帖和专栏文章，默认通过 `config.json` 配置，适合 Windows 下直接双击运行。
 
 ## 安装
 
@@ -17,72 +8,66 @@
 pip install -r requirements.txt
 ```
 
-## 使用
+## 使用方式
 
-最基础用法：
+### 方式 1：双击运行
+
+1. 打开 `config.json`
+2. 填好 `uid` 和你自己的登录 `cookie`
+3. 双击 `run.bat`
+
+脚本会在 `output/<uid>/<timestamp>/` 下生成结果。
+
+### 方式 2：命令行运行
+
+默认读取当前目录的 `config.json`：
 
 ```bash
-python weibo_crawler.py --uid 2016713117 --out ./weibo_out
+python weibo_crawler.py
 ```
 
-带登录态运行：
+也支持显式指定配置文件或临时覆盖参数：
 
 ```bash
-python weibo_crawler.py \
-  --uid 2016713117 \
-  --cookie "SUB=...; SUBP=...; XSRF-TOKEN=..." \
-  --max-post-pages 20 \
-  --max-article-pages 10 \
-  --out ./weibo_out
+python weibo_crawler.py --config ./config.json
+python weibo_crawler.py --uid 2016713117 --cookie "SUB=...; SUBP=..."
 ```
 
-## 参数
+## 配置项
 
-- `--uid`：微博用户 UID，必填
-- `--cookie`：登录 Cookie，可选，建议带上
-- `--max-post-pages`：最多抓取多少页微博发帖，默认 `10`
-- `--max-article-pages`：最多抓取多少页专栏，默认 `10`
-- `--out`：输出目录，默认 `./output`
-- `--sleep`：请求间隔秒数，默认 `1.0`
-- `--timeout`：请求超时秒数，默认 `20`
+`config.json` / `config.example.json` 字段：
+
+- `uid`: 微博 UID
+- `cookie`: 已登录 Cookie
+- `out_dir`: 输出根目录
+- `sleep_sec`: 请求间隔秒数
+- `timeout_sec`: 请求超时秒数
+- `max_post_pages`: 最多抓多少页微博
+- `max_article_pages`: 最多抓多少页文章候选
+- `save_raw`: 是否在结果中保留原始响应
+- `fail_on_unknown_article`: 遇到无法解析的文章候选时是否直接失败
 
 ## 输出文件
 
-运行后会在输出目录生成：
+每次运行都会创建独立目录，并输出：
 
 - `posts.jsonl`
 - `posts.csv`
 - `articles.jsonl`
 - `articles.csv`
+- `skipped_unknown.jsonl`
+- `errors.jsonl`
 - `manifest.json`
 
-## 说明
+## 行为说明
 
-1. 微博接口有反爬，强烈建议使用自己的 Cookie。
-2. 未登录或风控时，可能返回空数据、重复第一页或被限制访问。
-3. 若长文正文为空，通常是登录态失效、接口变更或该条微博无长文。
-4. 本脚本偏向自用与研究，不保证长期兼容微博接口变动。
+- 启动前会先做鉴权预检，Cookie 失效不会再伪装成成功
+- V+ 发帖只保留“明确识别为会员/付费可见”的微博
+- 专栏文章会继续访问 `ttarticle/p/show?id=...` 解析正文
+- 如果某条内容无法明确识别或解析，会写入 `skipped_unknown.jsonl` 或 `errors.jsonl`
 
-## 输出字段示例
+## 测试
 
-发帖数据常见字段：
-
-- `id`
-- `mblogid`
-- `created_at`
-- `text_raw`
-- `source`
-- `reposts_count`
-- `comments_count`
-- `attitudes_count`
-- `pic_num`
-- `pics`
-- `page_info`
-- `isLongText`
-- `longTextContent`
-
-专栏数据会额外尽量保留文章相关字段。
-
-## 免责声明
-
-请仅在合法、合规、符合目标平台规则的前提下使用。使用者需自行承担实际运行和数据使用责任。
+```bash
+python -m unittest discover -s tests -v
+```

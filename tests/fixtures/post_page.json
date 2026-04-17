@@ -1,0 +1,36 @@
+{
+  "data": {
+    "list": [
+      {
+        "id": 10001,
+        "mblogid": "VPLUS001",
+        "created_at": "Fri Apr 17 12:00:00 +0800 2026",
+        "text_raw": "仅会员可见的测试微博",
+        "source": "粉丝订阅VPlus",
+        "isLongText": true,
+        "reposts_count": 1,
+        "comments_count": 2,
+        "attitudes_count": 3,
+        "pic_num": 0,
+        "pics": [],
+        "user": {
+          "id": 123456,
+          "idstr": "123456"
+        }
+      },
+      {
+        "id": 10002,
+        "mblogid": "PUBLIC001",
+        "created_at": "Fri Apr 17 12:05:00 +0800 2026",
+        "text_raw": "普通公开微博",
+        "source": "微博 weibo.com",
+        "isLongText": false,
+        "user": {
+          "id": 123456,
+          "idstr": "123456"
+        }
+      }
+    ],
+    "since_id": "page-2"
+  }
+}
